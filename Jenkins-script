@@ -21,11 +21,11 @@ pipeline {
             steps {
                 sshagent(['ec2-user_tomcat']) {
                 sh """
-                    scp -o StrictHostKeyChecking=no webapp/target/*.war dockeradmin@10.8.20.8:/opt/tomcat/webapps/
+                    scp -o StrictHostKeyChecking=no webapp/target/*.war ec2-user@10.8.20.8:/opt/tomcat/webapps/
                     
-                    ssh dockeradmin@10.8.20.8 /opt/tomcat/bin/shutdown.sh
+                    ssh ec2-user@10.8.20.8 /opt/tomcat/bin/shutdown.sh
                     
-                    ssh dockeradmin@10.8.20.8 /opt/tomcat/bin/startup.sh
+                    ssh ec2-user@10.8.20.8 /opt/tomcat/bin/startup.sh
                     
                     """
                 }
