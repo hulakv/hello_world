@@ -19,7 +19,7 @@ pipeline {
         
         stage("Deploy-dev"){
             steps {
-                sshagent(['dockeradmin']) {
+                sshagent(['ec2-user_tomcat']) {
                 sh """
                     scp -o StrictHostKeyChecking=no webapp/target/*.war dockeradmin@10.8.20.8:/opt/tomcat/webapps/
                     
