@@ -20,7 +20,8 @@ pipeline {
         stage ("Copy webbapp") {
             steps {
             sshPublisher(publishers: [sshPublisherDesc(configName: 'Docker-ec2-user', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''/opt/tomcat/bin/shutdown.sh
-            /opt/tomcat/bin/startup.sh''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '//opt/tomcat/webapps', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'webapp/target/webapp.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            /opt/tomcat/bin/startup.sh''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '//opt/tomcat/webapps', remoteDirectorySDF: false, removePrefix: 'webapp/target/', sourceFiles: 'webapp/target/webapp.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            
             }
         }
         
