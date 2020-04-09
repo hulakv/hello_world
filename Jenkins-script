@@ -19,7 +19,16 @@ pipeline {
         
         stage("Deploy-dev"){
             steps {
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'Docker Host', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/opt/tomcat/webapps/', remoteDirectorySDF: false, removePrefix: 'webapp/target/', sourceFiles: '/webapp/target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                sshagent(['dockeradmin']) {
+                sh """
+                    scp -o StrictHostKeyChecking=no webapp/target/*.war dockeradmin@10.8.20.8:/opt/tomcat/webapps/
+                    
+                    ssh dockeradmin@10.8.20.8 /opt/tomcat/bin/shutdown.sh
+                    
+                    ssh dockeradmin@10.8.20.8 /opt/tomcat/bin/startup.sh
+                    
+                    """
+                }
             }
         
         }
