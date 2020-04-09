@@ -17,11 +17,18 @@ pipeline {
             }
         }
         
+        stage ("Copy webbapp") {
+            steps {
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'Docker-ec2-user', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/opt/tomcat/webapps/', remoteDirectorySDF: false, removePrefix: '/webapp/target/', sourceFiles: 'webapp/target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            }
+        }
+        
+        
         stage("Deploy-dev"){
             steps {
                 sshagent(['ec2-user_tomcat']) {
                 sh """
-                    scp -o StrictHostKeyChecking=no webapp/target/*.war ec2-user@10.8.20.8:/opt/tomcat/webapps/
+##                    scp -o StrictHostKeyChecking=no webapp/target/*.war ec2-user@10.8.20.8:/opt/tomcat/webapps/
                     
                     ssh ec2-user@10.8.20.8 /opt/tomcat/bin/shutdown.sh
                     
