@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git credentialsId: 'github', url: 'https://github.com/hulakv/hello_world'
+                git 'https://github.com/hulakv/hello_world.git'
             }
         }
         stage ("Maven Buid") {
