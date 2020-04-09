@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+    
+    environment {
+        PATH = "/opt/apache-maven-3.6.3/bin:$PATH"
+    }
+    
+    stages {
+        stage("Git Checkout") {
+            steps {
+                git 'https://github.com/hulakv/hello_world.git'
+            }
+        }
+        stage ("Maven Buid") {
+            steps {
+                sh "mvn clean package"
+            }
+        }
+        
+        stage ("Copy webbapp") {
+            steps {
+            sshPublisher(publishers: [sshPublisherDesc(configName: 'Docker-ec2-user', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''/opt/tomcat/bin/shutdown.sh
+            /opt/tomcat/bin/startup.sh''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/opt/tomcat/webapps/', remoteDirectorySDF: false, removePrefix: '/webapp/target/', sourceFiles: 'webapp/target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            
+            }
+        }
+        
+        
+   }
+ 
+ }
